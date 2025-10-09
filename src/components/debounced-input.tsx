@@ -30,7 +30,7 @@ export function DebouncedInput({
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   // close search input on clicking outside,
-  useOnClickOutside(inputRef, () => {
+  useOnClickOutside<HTMLInputElement>(inputRef, () => {
     if (!value) onChangeStatusOpen(false);
   });
 
@@ -55,12 +55,14 @@ export function DebouncedInput({
     };
   }, [onChange, onChangeStatusOpen]);
 
-  const debounceInput = React.useMemo(() =>
-    debounce((value) => {
-      const strValue = value as string;
-      void onChange(strValue);
-    }, debounceTimeout),
-  [onChange, debounceTimeout]);
+  const debounceInput = React.useMemo(
+    () =>
+      debounce((value) => {
+        const strValue = value as string;
+        void onChange(strValue);
+      }, debounceTimeout),
+    [onChange, debounceTimeout],
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     debounceInput(event.target.value);
@@ -76,7 +78,7 @@ export function DebouncedInput({
         className={cn(
           'h-auto rounded-none py-1.5 pl-8 text-sm transition-all duration-300',
           open
-            ? 'w-28 border md:w-40  lg:w-60'
+            ? 'w-28 border md:w-40 lg:w-60'
             : 'w-0 border-none bg-transparent',
           className,
         )}

@@ -1,4 +1,4 @@
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 
 export type Provider = 'vidsrc' | 'vidplay' | 'vidlink' | 'vidking';
 

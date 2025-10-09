@@ -8,11 +8,11 @@ import { Inter as FontSans } from 'next/font/google';
 import localFont from 'next/font/local';
 import { Analytics } from '@/components/analytics';
 import { siteConfig } from '@/configs/site';
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -79,7 +79,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          'overlflow-y-auto min-h-screen overflow-x-hidden bg-background font-sans antialiased',
+          'overlflow-y-auto bg-background min-h-screen overflow-x-hidden font-sans antialiased',
           fontSans.variable,
           fontHeading.variable,
         )}>

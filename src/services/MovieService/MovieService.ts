@@ -42,7 +42,7 @@ class MovieService extends BaseService {
         return pathname.includes(getSlug(item.id, getNameFromShow(item)));
       });
     if (!response?.length) {
-      return Promise.reject('not found');
+      return Promise.reject(new Error('not found'));
     }
     return Promise.resolve<Show>(response[0]);
   }
@@ -164,8 +164,7 @@ class MovieService extends BaseService {
         });
       } else if (this.isFulfilled(res)) {
         if (
-          requestTypesNeedUpdateMediaType.indexOf(requests[i].req.requestType) >
-          -1
+          requestTypesNeedUpdateMediaType.includes(requests[i].req.requestType)
         ) {
           res.value.data.results.forEach(
             (f) => (f.media_type = requests[i].req.mediaType),

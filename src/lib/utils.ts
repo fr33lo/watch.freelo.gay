@@ -1,5 +1,5 @@
 import { siteConfig } from '@/configs/site';
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 import MovieService from '@/services/MovieService';
 import {
   MediaType,
@@ -97,11 +97,11 @@ export function debounce(
 }
 
 export function getMobileDetect(userAgent: NavigatorID['userAgent']) {
-  const isAndroid = () => Boolean(userAgent.match(/Android/i));
-  const isIos = () => Boolean(userAgent.match(/iPhone|iPad|iPod/i));
-  const isOpera = () => Boolean(userAgent.match(/Opera Mini/i));
-  const isWindows = () => Boolean(userAgent.match(/IEMobile/i));
-  const isSSR = () => Boolean(userAgent.match(/SSR/i));
+  const isAndroid = () => /Android/i.test(userAgent);
+  const isIos = () => /iPhone|iPad|iPod/i.test(userAgent);
+  const isOpera = () => /Opera Mini/i.test(userAgent);
+  const isWindows = () => /IEMobile/i.test(userAgent);
+  const isSSR = () => /SSR/i.test(userAgent);
   const isMobile = () =>
     Boolean(isAndroid() || isIos() || isOpera() || isWindows());
   const isDesktop = () => Boolean(!isMobile() && !isSSR());

@@ -5,9 +5,14 @@ import { MediaType } from '@/types';
 
 export const revalidate = 3600;
 
-export default function Page({ params }: { params: { slug: string } }) {
-  const id = params.slug.split('-').pop();
-  const movieId: string | undefined = params.slug.split('/').pop();
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const id = slug.split('-').pop();
+  const movieId: string | undefined = slug.split('/').pop();
   const url = getEmbedUrl({
     provider: DEFAULT_PROVIDER,
     mediaType: 'tv',
@@ -15,5 +20,12 @@ export default function Page({ params }: { params: { slug: string } }) {
     season: 1,
     episode: 1,
   });
-  return <EmbedPlayer url={url} movieId={movieId} mediaType={MediaType.TV} tmdbId={id} />;
+  return (
+    <EmbedPlayer
+      url={url}
+      movieId={movieId}
+      mediaType={MediaType.TV}
+      tmdbId={id}
+    />
+  );
 }

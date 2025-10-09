@@ -1,0 +1,19 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/trpc/[trpc]/route": "app/api/trpc/[trpc]/route.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/sitemap/[id]/route": "app/sitemap/[id]/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/watch/anime/[slug]/page": "app/watch/anime/[slug]/page.js",
+  "/watch/movie/[slug]/page": "app/watch/movie/[slug]/page.js",
+  "/watch/tv/[slug]/page": "app/watch/tv/[slug]/page.js",
+  "/(front)/page": "app/(front)/page.js",
+  "/(front)/anime/page": "app/(front)/anime/page.js",
+  "/(front)/movies/page": "app/(front)/movies/page.js",
+  "/(front)/home/page": "app/(front)/home/page.js",
+  "/(front)/new-and-popular/page": "app/(front)/new-and-popular/page.js",
+  "/(front)/tv-shows/[slug]/page": "app/(front)/tv-shows/[slug]/page.js",
+  "/(front)/search/page": "app/(front)/search/page.js",
+  "/(front)/movies/[slug]/page": "app/(front)/movies/[slug]/page.js",
+  "/(front)/tv-shows/page": "app/(front)/tv-shows/page.js"
+}

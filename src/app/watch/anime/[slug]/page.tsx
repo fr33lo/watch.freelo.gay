@@ -8,9 +8,14 @@ import { type AxiosResponse } from 'axios';
 
 export const revalidate = 3600;
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const id = params.slug.split('-').pop();
-  const movieId: string | undefined = params.slug.split('/').pop();
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const id = slug.split('-').pop();
+  const movieId: string | undefined = slug.split('/').pop();
   const isAnime = movieId?.includes('t');
 
   let malId: number | undefined;
@@ -19,9 +24,14 @@ export default async function Page({ params }: { params: { slug: string } }) {
   if (isAnime && id) {
     // Resolve MAL id by searching MAL with the TMDB TV title
     try {
-      const res: AxiosResponse<Show> = await MovieService.findTvSeries(Number(id));
-const title = res.data?.name ?? res.data?.original_name ?? res.data?.title ?? '';
-      const year = res.data?.first_air_date ? Number(res.data.first_air_date.slice(0, 4)) : undefined;
+      const res: AxiosResponse<Show> = await MovieService.findTvSeries(
+        Number(id),
+      );
+      const title =
+        res.data?.name ?? res.data?.original_name ?? res.data?.title ?? '';
+      const year = res.data?.first_air_date
+        ? Number(res.data.first_air_date.slice(0, 4))
+        : undefined;
       if (title) {
         const best = await MALService.resolveAnimeId(title, year);
         if (best?.id) malId = best.id;

@@ -53,7 +53,7 @@ const ShowsContainer = ({ shows }: ShowsContainerProps) => {
           play: true,
           firstLoad: true,
         });
-    } catch (error) {}
+    } catch {}
   }, [pathname, modalStore.open]);
 
   React.useEffect(() => {

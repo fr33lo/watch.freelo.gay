@@ -1,7 +1,7 @@
 import * as React from "react";
 
 export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
-  ref: React.RefObject<T>,
+  ref: React.RefObject<T | null>,
   handler: (event: Event) => void,
 ) {
   React.useEffect(() => {

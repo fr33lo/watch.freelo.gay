@@ -23,9 +23,10 @@ function EmbedPlayer(props: EmbedPlayerProps) {
 
   // Initialize provider order from env/localStorage
   React.useEffect(() => {
-    const list = (env.NEXT_PUBLIC_PROVIDERS ?? 'vidlink,vidking,vidsrc,vidplay')
+    const PROVIDERS = (env as { NEXT_PUBLIC_PROVIDERS?: string }).NEXT_PUBLIC_PROVIDERS;
+    const list = (PROVIDERS ?? 'vidlink,vidking,vidsrc,vidplay')
       .split(',')
-      .map((s) => s.trim())
+      .map((s: string) => s.trim())
       .filter(Boolean) as Provider[];
     const stored = (typeof window !== 'undefined' && localStorage.getItem('provider')) as Provider | null;
     setProviderOrder(list);
@@ -272,7 +273,7 @@ function EmbedPlayer(props: EmbedPlayerProps) {
         }
       }
       handleSetIframeUrl(url);
-    } catch (e) {
+    } catch {
       if (explicitSelection) notify(`Provider '${selectedProvider}' cannot be used for this title.`);
       // if selected provider cannot build URL, try next automatically
       if (!explicitSelection) tryNextProvider();

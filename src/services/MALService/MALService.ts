@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from 'axios';
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 
 // Minimal MAL API client for server-side use only.
 // We only need search to retrieve MAL IDs given an anime title.

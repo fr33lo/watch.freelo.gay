@@ -27,10 +27,9 @@ const config = {
     ignoreBuildErrors: false,
   },
   eslint: {
-    // Keep lint enforced in CI's separate lint step, but unblock local builds
-    ignoreDuringBuilds: true,
+    // Keep lint enforced in CI and locally
+    ignoreDuringBuilds: false,
   },
-  swcMinify: true,
 };
 
 export default config;

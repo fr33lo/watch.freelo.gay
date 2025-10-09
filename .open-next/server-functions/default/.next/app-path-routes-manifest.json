@@ -1,0 +1,19 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/trpc/[trpc]/route": "/api/trpc/[trpc]",
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/sitemap/[id]/route": "/sitemap/[id]",
+  "/favicon.ico/route": "/favicon.ico",
+  "/watch/anime/[slug]/page": "/watch/anime/[slug]",
+  "/watch/movie/[slug]/page": "/watch/movie/[slug]",
+  "/watch/tv/[slug]/page": "/watch/tv/[slug]",
+  "/(front)/page": "/",
+  "/(front)/anime/page": "/anime",
+  "/(front)/movies/page": "/movies",
+  "/(front)/home/page": "/home",
+  "/(front)/new-and-popular/page": "/new-and-popular",
+  "/(front)/tv-shows/[slug]/page": "/tv-shows/[slug]",
+  "/(front)/search/page": "/search",
+  "/(front)/movies/[slug]/page": "/movies/[slug]",
+  "/(front)/tv-shows/page": "/tv-shows"
+}

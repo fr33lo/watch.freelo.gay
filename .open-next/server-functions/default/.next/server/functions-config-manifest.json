@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "functions": {
+    "/watch/movie/[slug]": {},
+    "/watch/anime/[slug]": {},
+    "/watch/tv/[slug]": {},
+    "/": {},
+    "/movies": {},
+    "/new-and-popular": {},
+    "/movies/[slug]": {},
+    "/anime": {},
+    "/home": {},
+    "/search": {},
+    "/tv-shows/[slug]": {},
+    "/tv-shows": {}
+  }
+}

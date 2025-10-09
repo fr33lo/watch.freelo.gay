@@ -1,4 +1,12 @@
 name = "watch-freelo-gay"
-compatibility_date = "2024-01-01"
+main = ".open-next/worker.js"
+compatibility_date = "2024-11-01"
+workers_dev = true
 
-pages_build_output_dir = "dist"
+# When ready to use R2 for ISR cache, define your bucket and prefix here and
+# switch incrementalCache to r2 in open-next.config.ts
+# r2_buckets = [
+#   { binding = "NEXT_INC_CACHE_R2_BUCKET", bucket_name = "your-r2-bucket-name" }
+# ]
+# [vars]
+# NEXT_INC_CACHE_R2_PREFIX = "incremental-cache"
