@@ -3,6 +3,8 @@ import EmbedPlayer from '@/components/watch/embed-player';
 import { getEmbedUrl, DEFAULT_PROVIDER } from '@/lib/providers';
 import { MediaType } from '@/types';
 
+export const runtime = 'edge';
+
 export const revalidate = 3600;
 
 export default async function Page({

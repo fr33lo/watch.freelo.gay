@@ -2,6 +2,8 @@ import SearchContainer from '@/components/search-container';
 import MovieService from '@/services/MovieService';
 import { redirect } from 'next/navigation';
 
+export const runtime = 'edge';
+
 interface SearchProps {
   searchParams: Promise<{
     q?: string;

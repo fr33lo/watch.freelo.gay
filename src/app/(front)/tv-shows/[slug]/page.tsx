@@ -2,6 +2,8 @@ import { type Metadata } from 'next';
 import { handleMetadata } from '@/lib/utils';
 import TvShowPage from '../page';
 
+export const runtime = 'edge';
+
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;

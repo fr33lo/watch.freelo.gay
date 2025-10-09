@@ -1,6 +1,9 @@
 import { env } from '@/env';
 import { buildMovieUrl } from '@/lib/utils';
 import { getTrendingAll } from '@/services/MovieService/tmdbService';
+
+export const runtime = 'edge';
+
 const APP_URL: string = (env as { NEXT_PUBLIC_APP_URL: string })
   .NEXT_PUBLIC_APP_URL;
 

@@ -6,6 +6,8 @@ import MovieService from '@/services/MovieService';
 import MALService from '@/services/MALService/MALService';
 import { type AxiosResponse } from 'axios';
 
+export const runtime = 'edge';
+
 export const revalidate = 3600;
 
 export default async function Page({
