@@ -36,10 +36,19 @@ type YouTubeEvent = {
   target?: YouTubePlayer | null;
 };
 
+// Strongly type the YouTube options so state updates type-check
+// per the iframe API (strings, numbers, booleans)
+type PlayerVars = Record<string, string | number | boolean | undefined>;
+interface YTPlayerOptions {
+  host?: string;
+  origin?: string;
+  playerVars?: PlayerVars;
+}
+
 const userAgent =
   typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
 const { isMobile } = getMobileDetect(userAgent);
-const defaultOptions: Record<string, any> = {
+const defaultOptions: YTPlayerOptions = {
   // Use standard host; this aligns better with widget expectations in dev
   host: 'https://www.youtube.com',
   playerVars: {
@@ -72,7 +81,7 @@ const ShowModal = () => {
     modalStore.firstLoad || IS_MOBILE,
   );
   const [options, setOptions] =
-    React.useState<Record<string, object>>(defaultOptions);
+    React.useState<YTPlayerOptions>(defaultOptions);
 
   const youtubeRef = React.useRef(null);
   const imageRef = React.useRef<HTMLImageElement>(null);
@@ -121,18 +130,18 @@ const ShowModal = () => {
   // get trailer and genres of show
   React.useEffect(() => {
     if (modalStore.firstLoad || IS_MOBILE) {
-      setOptions((state: Record<string, any>) => ({
+      setOptions((state) => ({
         ...state,
-        playerVars: { ...state.playerVars, mute: 1 },
+        playerVars: { ...(state.playerVars ?? {}), mute: 1 },
       }));
     }
     // Ensure origin matches exactly to avoid target origin errors
     try {
       const origin = window.location.origin;
-      setOptions((state: Record<string, any>) => ({
+      setOptions((state) => ({
         ...state,
         origin,
-        playerVars: { ...(state.playerVars || {}), origin },
+        playerVars: { ...(state.playerVars ?? {}), origin },
       }));
     } catch {}
 
