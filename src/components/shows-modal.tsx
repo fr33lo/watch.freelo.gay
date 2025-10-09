@@ -33,13 +33,15 @@ type YouTubePlayer = {
 };
 
 type YouTubeEvent = {
-  target: YouTubePlayer;
+  target?: YouTubePlayer | null;
 };
 
 const userAgent =
   typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
 const { isMobile } = getMobileDetect(userAgent);
-const defaultOptions: Record<string, object> = {
+const defaultOptions: Record<string, any> = {
+  // Use standard host; this aligns better with widget expectations in dev
+  host: 'https://www.youtube.com',
   playerVars: {
     // https://developers.google.com/youtube/player_parameters
     rel: 0,
@@ -47,12 +49,13 @@ const defaultOptions: Record<string, object> = {
     loop: 1,
     autoplay: 1,
     controls: 0,
-    showinfo: 0,
     disablekb: 1,
     enablejsapi: 1,
     playsinline: 1,
     cc_load_policy: 0,
     modestbranding: 3,
+    // origin is set on mount too; include here for redundancy
+    origin: typeof window !== 'undefined' ? window.location.origin : undefined,
   },
 };
 
@@ -76,23 +79,31 @@ const ShowModal = () => {
 
   const handleGetData = React.useCallback(async () => {
     const id: number | undefined = modalStore.show?.id;
-    const type: string =
+    // Prefer explicit tv/movie, but guard against unexpected values by falling back
+    const preferredType: 'tv' | 'movie' =
       modalStore.show?.media_type === MediaType.TV ? 'tv' : 'movie';
-    if (!id || !type) {
-      return;
-    }
-    const data: ShowWithGenreAndVideo = await MovieService.findMovieByIdAndType(
-      id,
-      type,
-    );
+    if (!id) return;
 
-    const keywords: KeyWord[] =
-      data?.keywords?.results || data?.keywords?.keywords;
+    let data: ShowWithGenreAndVideo | null = null;
+    try {
+      data = await MovieService.findMovieByIdAndType(id, preferredType);
+    } catch (err: any) {
+      // If the preferred type 404s (e.g., mixed/trending result mislabels), try the other type
+      try {
+        const altType: 'tv' | 'movie' = preferredType === 'tv' ? 'movie' : 'tv';
+        data = await MovieService.findMovieByIdAndType(id, altType);
+      } catch (err2) {
+        console.error('Failed to fetch show details for modal', err2);
+        return;
+      }
+    }
+
+    if (!data) return;
+
+    const keywords: KeyWord[] = data?.keywords?.results || data?.keywords?.keywords;
 
     if (keywords?.length) {
-      setIsAnime(
-        !!keywords.find((keyword: KeyWord) => keyword.name === 'anime'),
-      );
+      setIsAnime(!!keywords.find((keyword: KeyWord) => keyword.name === 'anime'));
     }
 
     if (data?.genres) {
@@ -110,11 +121,21 @@ const ShowModal = () => {
   // get trailer and genres of show
   React.useEffect(() => {
     if (modalStore.firstLoad || IS_MOBILE) {
-      setOptions((state: Record<string, object>) => ({
+      setOptions((state: Record<string, any>) => ({
         ...state,
         playerVars: { ...state.playerVars, mute: 1 },
       }));
     }
+    // Ensure origin matches exactly to avoid target origin errors
+    try {
+      const origin = window.location.origin;
+      setOptions((state: Record<string, any>) => ({
+        ...state,
+        origin,
+        playerVars: { ...(state.playerVars || {}), origin },
+      }));
+    } catch {}
+
     void handleGetData();
   }, [IS_MOBILE, modalStore.firstLoad, handleGetData]);
 
@@ -124,16 +145,41 @@ const ShowModal = () => {
 
 
   const handleCloseModal = () => {
+    // Snapshot state before clearing
+    const hadShow = !!modalStore.show;
+    const wasFirstLoad = (modalStore as any).firstLoad as boolean;
+    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+    const previousPath = (modalStore as any).previousPath as string | null;
+    const pushedSlug = (modalStore as any).pushedSlug as boolean;
+
     modalStore.reset();
-    if (!modalStore.show || modalStore.firstLoad) {
-      window.history.pushState(null, '', '/home');
-    } else {
-      window.history.back();
+
+    // If a slug was pushed when opening, always return to the previous path
+    if (pushedSlug && previousPath) {
+      window.history.pushState(null, '', previousPath);
+      return;
+    }
+
+    // If we opened directly on a slug (first load), return to the section page
+    const slugMatch = pathname.match(/^\/(movies|tv-shows|anime)\/[^/]+$/);
+    if (wasFirstLoad && slugMatch) {
+      window.history.pushState(null, '', `/${slugMatch[1]}`);
+      return;
+    }
+
+    // Otherwise, do nothing (stay on the current page)
+    if (!hadShow) {
+      // As a last resort, keep user on the current path
+      return;
     }
   };
 
-  const onEnd = (event: YouTubeEvent) => {
-    event.target.seekTo(0);
+const onEnd = (event: YouTubeEvent) => {
+    try {
+      if (event?.target && typeof event.target.seekTo === 'function') {
+        event.target.seekTo(0);
+      }
+    } catch {}
   };
 
   const onPlay = () => {
@@ -147,8 +193,17 @@ const ShowModal = () => {
     }
   };
 
-  const onReady = (event: YouTubeEvent) => {
-    event.target.playVideo();
+const onReady = (event: YouTubeEvent) => {
+    try {
+      if (event?.target && typeof event.target.playVideo === 'function') {
+        // Defer to ensure the iframe is attached
+        setTimeout(() => {
+          try {
+            event.target!.playVideo();
+          } catch {}
+        }, 0);
+      }
+    } catch {}
   };
 
   const handleChangeMute = () => {
@@ -197,6 +252,7 @@ const ShowModal = () => {
           />
           {trailer && (
             <Youtube
+              key={trailer}
               opts={options}
               onEnd={onEnd}
               onPlay={onPlay}

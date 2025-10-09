@@ -76,8 +76,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={cn(
           'overlflow-y-auto bg-background min-h-screen overflow-x-hidden font-sans antialiased',
           fontSans.variable,
@@ -101,7 +102,7 @@ export default function RootLayout({
                 dangerouslySetInnerHTML={{
                   __html: `
           window.dataLayer = window.dataLayer || [];
-          function gtag(){window.dataLayer.push(arguments);}
+          function gtag(){window.dataLayer.push(arguments);} 
           gtag('js', new Date());
 
           gtag('config', '${env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}', { cookie_flags: 'max-age=86400;secure;samesite=none' });`,

@@ -128,6 +128,8 @@ export const ShowCard = ({ show }: { show: Show; pathname: string }) => {
   const handleMoreInfoClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    const prev = typeof window !== 'undefined' ? window.location.pathname : null;
+    if (prev) useModalStore.setState({ previousPath: prev, pushedSlug: false });
     useModalStore.setState({
       show: show,
       open: true,

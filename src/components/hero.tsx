@@ -118,14 +118,16 @@ const Hero = ({ randomShow }: HeroProps) => {
                     className="h-auto flex-shrink-0 gap-2 rounded-xl"
                     onClick={() => {
                       const name = getNameFromShow(randomShow);
-                      const path: string =
+                      const sectionPath: string =
                         randomShow.media_type === MediaType.TV
                           ? 'tv-shows'
                           : 'movies';
+                      const prev = typeof window !== 'undefined' ? window.location.pathname : null;
+                      if (prev) useModalStore.setState({ previousPath: prev, pushedSlug: true });
                       window.history.pushState(
                         null,
                         '',
-                        `${path}/${getSlug(randomShow.id, name)}`,
+                        `${sectionPath}/${getSlug(randomShow.id, name)}`,
                       );
                       useModalStore.setState({
                         show: randomShow,
@@ -139,7 +141,9 @@ const Hero = ({ randomShow }: HeroProps) => {
                 </div>
               </div>
             </div>{' '}
-            <div className="opacity-71 absolute inset-0 right-[26.09%] z-[8] bg-gradient-to-r from-secondary to-85%"></div>
+            {/* Left-to-right dark green gradient overlay that fades into the artwork */}
+            <div className="absolute inset-0 right-[26.09%] z-[8] bg-gradient-to-r from-terminal-bg-dark/95 via-terminal-bg/70 to-transparent"></div>
+            {/* Bottom fade-to-background so rows below are readable */}
             <div className="absolute bottom-[-1px] left-0 right-0 z-[8] h-[14.7vw] bg-gradient-to-b from-background/0 from-30% via-background/30 via-50% to-background to-80%"></div>
           </div>
           <div className="relative inset-0 -z-50 mb-5 pb-[60%] sm:pb-[40%]"></div>
