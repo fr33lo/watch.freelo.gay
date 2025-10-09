@@ -80,8 +80,7 @@ const ShowModal = () => {
   const [isMuted, setIsMuted] = React.useState<boolean>(
     modalStore.firstLoad || IS_MOBILE,
   );
-  const [options, setOptions] =
-    React.useState<YTPlayerOptions>(defaultOptions);
+  const [options, setOptions] = React.useState<YTPlayerOptions>(defaultOptions);
 
   const youtubeRef = React.useRef(null);
   const imageRef = React.useRef<HTMLImageElement>(null);
@@ -96,12 +95,12 @@ const ShowModal = () => {
     let data: ShowWithGenreAndVideo | null = null;
     try {
       data = await MovieService.findMovieByIdAndType(id, preferredType);
-    } catch (err: any) {
+    } catch {
       // If the preferred type 404s (e.g., mixed/trending result mislabels), try the other type
       try {
         const altType: 'tv' | 'movie' = preferredType === 'tv' ? 'movie' : 'tv';
         data = await MovieService.findMovieByIdAndType(id, altType);
-      } catch (err2) {
+      } catch (err2: unknown) {
         console.error('Failed to fetch show details for modal', err2);
         return;
       }
@@ -109,10 +108,13 @@ const ShowModal = () => {
 
     if (!data) return;
 
-    const keywords: KeyWord[] = data?.keywords?.results || data?.keywords?.keywords;
+    const keywords: KeyWord[] =
+      data?.keywords?.results || data?.keywords?.keywords;
 
     if (keywords?.length) {
-      setIsAnime(!!keywords.find((keyword: KeyWord) => keyword.name === 'anime'));
+      setIsAnime(
+        !!keywords.find((keyword: KeyWord) => keyword.name === 'anime'),
+      );
     }
 
     if (data?.genres) {
@@ -152,14 +154,14 @@ const ShowModal = () => {
     setIsAnime(false);
   }, [modalStore]);
 
-
   const handleCloseModal = () => {
     // Snapshot state before clearing
     const hadShow = !!modalStore.show;
-    const wasFirstLoad = (modalStore as any).firstLoad as boolean;
-    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-    const previousPath = (modalStore as any).previousPath as string | null;
-    const pushedSlug = (modalStore as any).pushedSlug as boolean;
+    const wasFirstLoad = modalStore.firstLoad;
+    const pathname =
+      typeof window !== 'undefined' ? window.location.pathname : '';
+    const previousPath = modalStore.previousPath;
+    const pushedSlug = modalStore.pushedSlug;
 
     modalStore.reset();
 
@@ -170,7 +172,8 @@ const ShowModal = () => {
     }
 
     // If we opened directly on a slug (first load), return to the section page
-    const slugMatch = pathname.match(/^\/(movies|tv-shows|anime)\/[^/]+$/);
+    const slugRe = /^\/(movies|tv-shows|anime)\/[^/]+$/;
+    const slugMatch = slugRe.exec(pathname);
     if (wasFirstLoad && slugMatch) {
       window.history.pushState(null, '', `/${slugMatch[1]}`);
       return;
@@ -183,7 +186,7 @@ const ShowModal = () => {
     }
   };
 
-const onEnd = (event: YouTubeEvent) => {
+  const onEnd = (event: YouTubeEvent) => {
     try {
       if (event?.target && typeof event.target.seekTo === 'function') {
         event.target.seekTo(0);
@@ -202,7 +205,7 @@ const onEnd = (event: YouTubeEvent) => {
     }
   };
 
-const onReady = (event: YouTubeEvent) => {
+  const onReady = (event: YouTubeEvent) => {
     try {
       if (event?.target && typeof event.target.playVideo === 'function') {
         // Defer to ensure the iframe is attached
@@ -230,8 +233,8 @@ const onReady = (event: YouTubeEvent) => {
     const type = isAnime
       ? 'anime'
       : modalStore.show?.media_type === MediaType.MOVIE
-      ? 'movie'
-      : 'tv';
+        ? 'movie'
+        : 'tv';
     let id = `${modalStore.show?.id}`;
     if (isAnime) {
       const prefix: string =
@@ -312,29 +315,35 @@ const onReady = (event: YouTubeEvent) => {
           <DialogTitle className="text-lg font-medium leading-6 text-slate-50 sm:text-xl">
             {modalStore.show?.title ?? modalStore.show?.name}
           </DialogTitle>
-          <div className="flex items-center space-x-4 text-sm sm:text-base font-terminal">
+          <div className="flex items-center space-x-4 font-terminal text-sm sm:text-base">
             <div className="text-terminal-accent">
-              <span className="text-terminal-text">RATING:</span> {Math.round((Number(modalStore.show?.vote_average) / 10) * 100) ?? '-'}%
+              <span className="text-terminal-text">RATING:</span>{' '}
+              {Math.round((Number(modalStore.show?.vote_average) / 10) * 100) ??
+                '-'}
+              %
             </div>
             {modalStore.show?.release_date ? (
               <div className="text-terminal-accent">
-                <span className="text-terminal-text">YEAR:</span> {getYear(modalStore.show?.release_date)}
+                <span className="text-terminal-text">YEAR:</span>{' '}
+                {getYear(modalStore.show?.release_date)}
               </div>
             ) : modalStore.show?.first_air_date ? (
               <div className="text-terminal-accent">
-                <span className="text-terminal-text">YEAR:</span> {getYear(modalStore.show?.first_air_date)}
+                <span className="text-terminal-text">YEAR:</span>{' '}
+                {getYear(modalStore.show?.first_air_date)}
               </div>
             ) : null}
             {modalStore.show?.original_language && (
               <div className="text-terminal-accent">
-                <span className="text-terminal-text">LANG:</span> [{modalStore.show.original_language.toUpperCase()}]
+                <span className="text-terminal-text">LANG:</span> [
+                {modalStore.show.original_language.toUpperCase()}]
               </div>
             )}
           </div>
           <DialogDescription className="line-clamp-3 text-xs text-slate-50 dark:text-slate-50 sm:text-sm">
             {modalStore.show?.overview ?? '-'}
           </DialogDescription>
-          <div className="flex items-center gap-2 text-xs sm:text-sm font-terminal">
+          <div className="flex items-center gap-2 font-terminal text-xs sm:text-sm">
             <span className="text-terminal-text">GENRES:</span>
             <span className="text-terminal-accent">
               [{genres.map((genre) => genre.name).join(', ')}]
