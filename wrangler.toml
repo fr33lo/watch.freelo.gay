@@ -1,6 +1,7 @@
 name = "watch-freelo-gay"
 main = ".open-next/worker.js"
 compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 
 # When ready to use R2 for ISR cache, define your bucket and prefix here and
