@@ -1,71 +1,69 @@
-# MovieWeb Kickstart Project
+# watch.freelo.gay
 
-A launching point for building a movie streaming website.
+a curated collection of things worth watching.
 
-## Features
+built this because finding good movies shouldn't be a hassle. no ads, no tracking, no bullshit — just clean movie discovery that actually works.
 
-- **Browse Movies**: Explore a vast collection of movies sorted by genre, release date, or popularity.
-- **Search Functionality**: Easily find movies by title, director, or cast.
-- **User Reviews**: Read and write reviews to share your thoughts and opinions about movies.
-- **User Ratings**: Rate movies and see the average ratings provided by the community.
-- **Recommendation Engine**: Get personalized movie recommendations based on your preferences and viewing history.
-- **Responsive Design**: Enjoy a seamless experience across devices with our responsive web design.
+## what you'll find:
 
-## Deployments
-### Deploy with Vercel
-1. Click the button below to deploy the project on Vercel.
+- **clean movie browsing** — sort by genre, year, or popularity without the noise
+- **search that works** — find stuff by title, director, or cast
+- **honest ratings** — community ratings without manipulation
+- **works everywhere** — responsive design that doesn't suck
+- **fast loading** — because waiting is annoying
 
-- [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbitfreee%2Fmovie-web-kickstart&env=NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_TMDB_TOKEN,NEXT_PUBLIC_SITE_NAME) 
-2. Fill in the required environment variables:
-- `NEXT_PUBLIC_APP_URL`: The URL of your deployed project (e.g., `https://movie-web-kickstart.vercel.app`)
-- `NEXT_PUBLIC_TMDB_TOKEN`: Your TMDb API key (get it [here](https://www.themoviedb.org/documentation/api), or you can use default token in .env.example file for testing)
-- `NEXT_PUBLIC_SITE_NAME`: The name of your website (e.g., `MovieWeb Kickstart`)
+## getting it running:
 
-3. Click "Deploy" and wait for the deployment to complete.
+### quick deploy (vercel)
 
-### Deploy with Cloudflare Pages
-To deploy on [Cloudflare Pages](https://pages.cloudflare.com/) you can use the following instructions:
-[README](https://github.com/cloudflare/next-on-pages/tree/main/packages/next-on-pages)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbitfreee%2Fmovie-web-kickstart&env=NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_TMDB_TOKEN,NEXT_PUBLIC_SITE_NAME)
 
-## Local Development
+you'll need these environment variables:
+- `NEXT_PUBLIC_APP_URL`: where you're hosting this thing
+- `NEXT_PUBLIC_TMDB_TOKEN`: grab one from [TMDb](https://www.themoviedb.org/documentation/api) (or use the example one for testing)
+- `NEXT_PUBLIC_SITE_NAME`: whatever you want to call it
 
-1. Clone the repository: `git clone https://github.com/bitfreee/movie-web-kickstart`
-2. Navigate to the project directory: `cd movie-web-kickstart`
-3. Install dependencies: `npm install`
-4. Create .env file `cp .env.example .env`
-4. Start the development server: `npm run dev`
+### other hosting
 
-## Tech Stack
+works on cloudflare pages, netlify, or wherever you deploy next.js apps. it's just a static site.
 
-- [Next.js](https://nextjs.org/) – framework
-- [TypeScript](https://www.typescriptlang.org/) – language
-- [Tailwind](https://tailwindcss.com/) – CSS
-- [Vercel](https://vercel.com/) – deployments
-- [TMDb](https://www.themoviedb.org/) - movie database
-- [Vidsrc.cc](https://vidsrc.cc) - streaming links
-- [VidLink](https://vidlink.pro) - TMDB-based embeds for movie/TV and MAL-based embeds for anime
-- [VidKing](https://www.vidking.net) - TMDB-based embeds for movie/TV with customization options
-- [AutoEmbed](https://player.autoembed.cc) - IMDB or TMDB-based embeds for movie/TV
+## running locally:
 
-## Contributing
+```bash
+git clone [your-repo-url]
+cd watch.freelo.gay-dev
+npm install
+cp .env.example .env  # add your TMDb token
+npm run dev
+```
 
-Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
+open http://localhost:3000 and you're good.
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/improvement`).
-3. Make your changes.
-4. Commit your changes (`git commit -am 'Add new feature'`).
-5. Push to the branch (`git push origin feature/improvement`).
-6. Create a new Pull Request.
+## how it's built:
 
-## License
+next.js because it works. typescript because types are helpful. tailwind because writing css is tedious.
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+data comes from TMDb (they have a solid API). embeds from various sources that actually work.
 
-## Acknowledgements
+**stack:**
+- next.js + typescript + tailwind
+- TMDb for movie data
+- various embed sources for streaming
+- deployed statically because simple is better
 
-- The Movie Database (TMDb) for providing the movie data through their API.
-- [Vidsrc.cc](https://vidsrc.cc) for providing the movie streaming links.
-- [VidLink](https://vidlink.pro), [VidKing](https://www.vidking.net), and [AutoEmbed](https://player.autoembed.cc) for additional embed options.
+## contributing:
+
+found a bug? have an idea? cool.
+
+fork it, fix it, PR it. keep the code clean and the commits descriptive.
+
+## credits:
+
+thanks to TMDb for the movie data and the various embed providers for actually working.
+
 ---
+
+*part of the freelo.gay ecosystem | no tracking, no ads, no nonsense*
+
+© 2025 freelo | built because finding good movies shouldn't suck
 
